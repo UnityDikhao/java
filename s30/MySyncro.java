@@ -18,7 +18,7 @@ class mythread extends Thread {
     }
 }
 
-class MySynchro {
+class MySyncro {
     public static void main(String args[]) {
         mythread t1 = new mythread("Thread 1: ");
         mythread t2 = new mythread("Thread 2: ");
