@@ -1,18 +1,16 @@
-public class Alphabet {
-    public static void main(String[] args) {
-        Thread thread = new Thread(() -> {
-            char currentChar = 'A';
-            try {
-                while (currentChar <= 'Z') {
-                    System.out.print(currentChar + " ");
-                    currentChar++;
-                    Thread.sleep(2000); // Pause for 2 seconds
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+public class Alphabet extends Thread {
+    public void run() {
+        try {
+            for (char i = 'a'; i <= 'z'; i++) {
+                System.out.println(i);
+                Thread.sleep(2000);
             }
-        });
+        } catch (Exception e) {
+        }
+    }
 
-        thread.start();
+    public static void main(String args[]) {
+        Alphabet p = new Alphabet();
+        p.start();
     }
 }
