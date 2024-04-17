@@ -1,76 +1,66 @@
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
-public class NumberDisplay extends JFrame {
-    private JTextField textField;
-    private JButton startButton;
-    private volatile boolean running;
+public class NumberDisplay extends Frame implements Runnable, WindowListener, ActionListener {
+    Thread t;
+    TextField t1;
+    Button b1;
 
-    public NumberDisplay() {
-        setTitle("Number Display");
-        setSize(300, 100);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    NumberDisplay() {
+        t = new Thread(this);
+        t.start();
         setLayout(new FlowLayout());
 
-        textField = new JTextField(10);
-        add(textField);
+        t1 = new TextField(20);
+        add(t1);
 
-        startButton = new JButton("Start");
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!running) {
-                    running = true;
-                    startButton.setEnabled(false);
-                    startDisplayingNumbers();
-                }
-            }
-        });
-        add(startButton);
+        b1 = new Button("Start");
+        add(b1);
+        b1.addActionListener(this);
+
+        setSize(300, 200);
+        addWindowListener(this);
+        setVisible(true);
     }
 
-    private void startDisplayingNumbers() {
-        Runnable numberRunnable = new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 1; i <= 100 && running; i++) {
-                    final int number = i;
-                    SwingUtilities.invokeLater(new Runnable() {
-                            public void run() {
-                            textField.setText(Integer.toString(number));
-                        }
-                    });
-
-                    try 
-                    {
-                        Thread.sleep(1000); // Sleep for 1 second
-                    } 
-                    catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                running = false;
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        startButton.setEnabled(true);
-                    }
-                });
-            }
-        };
-
-        Thread numberThread = new Thread(numberRunnable);
-        numberThread.start();
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == b1) {
+            MyThread thread = new MyThread();
+            thread.start();
+        }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new NumberDisplay().setVisible(true);
+    class MyThread extends Thread {
+        public void run() {
+            for (int i = 1; i <= 100; i++) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                t1.setText(" "+ i);
             }
-        });
+        }
+    }
+
+    public void run() {
+        
+    }
+
+    public void windowClosing(WindowEvent e) {
+        dispose();
+    }
+
+   
+    public void windowOpened(WindowEvent e) {}
+    public void windowClosed(WindowEvent e) {}
+    public void windowIconified(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {}
+
+    public static void main(String a[]) {
+        new NumberDisplay();
     }
 }
-
