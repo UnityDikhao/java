@@ -1,41 +1,42 @@
-import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
+import java.awt.event.*;
 
-public class BlinkingText implements Runnable {
-    private JLabel label;
+class BlinkingText extends Frame implements Runnable {
+    Thread t;
+    Label l1;
+    int f;
 
-    public BlinkingText(JLabel label) {
-        this.label = label;
+    BlinkingText() {
+        t = new Thread(this);
+        t.start();
+        setLayout(null);
+        l1 = new Label("Hello JAVA");
+        l1.setBounds(100, 100, 100, 40);
+        add(l1);
+        setSize(300, 300);
+        setVisible(true);
+        f = 0;
     }
 
-    @Override
     public void run() {
         try {
-            while (true) {
-                label.setVisible(true);
-                TimeUnit.MILLISECONDS.sleep(500); // Text visible for 500 milliseconds
-                label.setVisible(false);
-                TimeUnit.MILLISECONDS.sleep(500); // Text invisible for 500 milliseconds
+            if (f == 0) {
+                t.sleep(200);
+                l1.setText("");
+                f = 1;
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            if (f == 1) {
+                t.sleep(200);
+                l1.setText("Hello Java");
+                f = 0;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
+        run();
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Blinking Text");
-        frame.setSize(300, 200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JLabel label = new JLabel("Blinking Text");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        frame.add(label, BorderLayout.CENTER);
-
-        BlinkingText blinkingText = new BlinkingText(label);
-        Thread thread = new Thread(blinkingText);
-        thread.start();
-
-        frame.setVisible(true);
+    public static void main(String a[]) {
+        new BlinkingText();
     }
 }
