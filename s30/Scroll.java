@@ -27,11 +27,11 @@ public class Scroll {
 
             // Iterate over the ResultSet and display the data
             System.out.println("Teacher Table:");
-            System.out.println("TNo\tTName\tSubject");
+            System.out.println("TNo\tTName\tSalary");
             while (resultSet.next()) {
                 int tid = resultSet.getInt("TNo");
                 String tname = resultSet.getString("TName");
-                String salary = resultSet.getString("Subject");
+                String salary = resultSet.getString("Salary");
                 System.out.println(tid + "\t" + tname + "\t" + salary);
             }
 
