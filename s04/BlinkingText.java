@@ -1,11 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
 
-class BlinkingText extends Frame implements Runnable, WindowListener {
+class BlinkingText extends Frame implements Runnable {
     Thread t;
     Label l1;
     int f;
-    
+
     BlinkingText() {
         t = new Thread(this);
         t.start();
@@ -14,14 +14,17 @@ class BlinkingText extends Frame implements Runnable, WindowListener {
         l1.setBounds(100, 100, 100, 40);
         add(l1);
         setSize(300, 300);
-        
-        addWindowListener(this); 
-        
         setVisible(true);
-        
         f = 0;
+
+       
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose(); 
+            }
+        });
     }
-    
+
     public void run() {
         try {
             if (f == 0) {
@@ -43,17 +46,4 @@ class BlinkingText extends Frame implements Runnable, WindowListener {
     public static void main(String a[]) {
         new BlinkingText();
     }
-
-    
-    public void windowClosing(WindowEvent e) {
-        dispose();
-    }
-    
-    public void windowOpened(WindowEvent e) {}
-    public void windowClosed(WindowEvent e) {}
-    public void windowIconified(WindowEvent e) {}
-    public void windowDeiconified(WindowEvent e) {}
-    public void windowActivated(WindowEvent e) {}
-    public void windowDeactivated(WindowEvent e) {}
 }
-
