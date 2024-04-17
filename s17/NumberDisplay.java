@@ -2,7 +2,7 @@
 import java.awt.*;
 import java.awt.event.*;
 
-public class NumberDisplay extends Frame implements Runnable, WindowListener, ActionListener {
+class NumberDisplay extends Frame implements Runnable, ActionListener {
     Thread t;
     TextField t1;
     Button b1;
@@ -20,15 +20,12 @@ public class NumberDisplay extends Frame implements Runnable, WindowListener, Ac
         b1.addActionListener(this);
 
         setSize(300, 200);
-        addWindowListener(this);
         setVisible(true);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == b1) {
-            MyThread thread = new MyThread();
-            thread.start();
-        }
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
     }
 
     class MyThread extends Thread {
@@ -39,26 +36,21 @@ public class NumberDisplay extends Frame implements Runnable, WindowListener, Ac
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                t1.setText(" "+ i);
+                t1.setText(" " + i);
             }
         }
     }
 
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == b1) {
+            MyThread thread = new MyThread();
+            thread.start();
+        }
+    }
+
     public void run() {
-        
-    }
 
-    public void windowClosing(WindowEvent e) {
-        dispose();
     }
-
-   
-    public void windowOpened(WindowEvent e) {}
-    public void windowClosed(WindowEvent e) {}
-    public void windowIconified(WindowEvent e) {}
-    public void windowDeiconified(WindowEvent e) {}
-    public void windowActivated(WindowEvent e) {}
-    public void windowDeactivated(WindowEvent e) {}
 
     public static void main(String a[]) {
         new NumberDisplay();
